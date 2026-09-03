@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A SPA depende de `wpp_prospector_bot_server` via `file:../wpp_prospector_bot_server`
+# só para os contratos (`wpp_prospector_bot_server/contracts`). O servidor precisa
+# ser buildado ANTES: no modo `build`/`default` o subcaminho resolve para o
+# `dist/` compilado do servidor (em dev/typecheck resolve para o fonte).
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout panel (SPA)
+        uses: actions/checkout@v4
+        with:
+          path: wpp_prospector_bot_panel
+
+      - name: Checkout server (irmão, para os contratos)
+        uses: actions/checkout@v4
+        with:
+          repository: Marcoslima016/wpp_prospector_bot
+          path: wpp_prospector_bot_server
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Build do servidor (emite dist/.../contracts)
+        working-directory: wpp_prospector_bot_server
+        run: |
+          npm ci
+          npm run build
+
+      - name: Instalar a SPA (resolve o link file:)
+        working-directory: wpp_prospector_bot_panel
+        run: npm ci
+
+      - name: Lint
+        working-directory: wpp_prospector_bot_panel
+        run: npm run lint
+
+      - name: Typecheck
+        working-directory: wpp_prospector_bot_panel
+        run: npm run typecheck
+
+      - name: Test
+        working-directory: wpp_prospector_bot_panel
+        run: npm run test
+
+      - name: Build
+        working-directory: wpp_prospector_bot_panel
+        run: npm run build
