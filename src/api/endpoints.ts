@@ -1,14 +1,24 @@
 import { apiFetch } from "./client";
 import {
+  bulkProspectResultSchema,
   conversationDetailSchema,
   conversationListPageSchema,
   consumptionSeriesSchema,
+  importLeadsResultSchema,
+  leadListPageSchema,
   overviewSchema,
+  resetLeadResultSchema,
+  type BulkProspectInput,
+  type BulkProspectResult,
   type ConsumptionGroupBy,
   type ConsumptionSeries,
   type ConversationDetail,
   type ConversationListPage,
+  type ImportLeadsInput,
+  type ImportLeadsResult,
+  type LeadListPage,
   type Overview,
+  type ResetLeadResult,
 } from "./contracts";
 import { parseWithContract } from "./parse";
 
@@ -36,6 +46,39 @@ export async function getConversation(
 ): Promise<ConversationDetail> {
   const data = await apiFetch(`/conversations/${encodeURIComponent(leadPhone)}`, { signal });
   return parseWithContract(conversationDetailSchema, data);
+}
+
+// --- Leads (change add-lead-import-and-bulk-prospecting) ---
+
+export interface LeadListParams {
+  state?: string;
+  phone?: string;
+  segment?: string;
+  limit?: number;
+  cursor?: string;
+}
+
+export async function listLeads(
+  params: LeadListParams = {},
+  signal?: AbortSignal,
+): Promise<LeadListPage> {
+  const data = await apiFetch("/leads", { query: { ...params }, signal });
+  return parseWithContract(leadListPageSchema, data);
+}
+
+export async function importLeads(payload: ImportLeadsInput): Promise<ImportLeadsResult> {
+  const data = await apiFetch("/leads/import", { method: "POST", body: payload });
+  return parseWithContract(importLeadsResultSchema, data);
+}
+
+export async function bulkProspect(payload: BulkProspectInput): Promise<BulkProspectResult> {
+  const data = await apiFetch("/leads/prospect", { method: "POST", body: payload });
+  return parseWithContract(bulkProspectResultSchema, data);
+}
+
+export async function resetLead(leadPhone: string): Promise<ResetLeadResult> {
+  const data = await apiFetch(`/leads/${encodeURIComponent(leadPhone)}/reset`, { method: "POST" });
+  return parseWithContract(resetLeadResultSchema, data);
 }
 
 export interface ConsumptionParams {

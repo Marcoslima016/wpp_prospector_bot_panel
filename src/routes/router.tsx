@@ -13,6 +13,7 @@ import { NotFoundRoute } from "@/routes/NotFoundRoute";
 import { ConversationsRoute } from "@/features/conversations/ConversationsRoute";
 import { ConversationDetailRoute } from "@/features/conversations/ConversationDetailRoute";
 import { ConsumptionRoute } from "@/features/consumption/ConsumptionRoute";
+import { LeadsRoute } from "@/features/leads/LeadsRoute";
 
 function ProtectedLayout() {
   const { status } = useSession();
@@ -39,6 +40,7 @@ export const appRoutes: RouteObject[] = [
       { index: true, element: <Navigate to="/conversations" replace /> },
       { path: "conversations", element: <ConversationsRoute /> },
       { path: "conversations/:leadPhone", element: <ConversationDetailRoute /> },
+      { path: "leads", element: <LeadsRoute /> },
       { path: "consumption", element: <ConsumptionRoute /> },
       { path: "*", element: <NotFoundRoute /> },
     ],

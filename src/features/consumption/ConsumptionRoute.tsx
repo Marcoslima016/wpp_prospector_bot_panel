@@ -225,7 +225,7 @@ function OverviewCards() {
   ];
 
   return (
-    <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-5">
+    <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-5" data-testid="overview-cards">
       {cards.map((card) => (
         <Card key={card.label}>
           <CardHeader className="p-4 pb-1">

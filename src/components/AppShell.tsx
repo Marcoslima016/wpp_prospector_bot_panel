@@ -7,6 +7,7 @@ import { ContractMismatchBanner } from "@/components/ContractMismatchBanner";
 
 const NAV = [
   { to: "/conversations", label: "Conversas" },
+  { to: "/leads", label: "Leads" },
   { to: "/consumption", label: "Consumo" },
 ];
 

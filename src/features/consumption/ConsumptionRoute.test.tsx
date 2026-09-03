@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { screen, waitFor } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { consumptionSeries, EMPTY_CONSUMPTION, overview } from "@/test/fixtures";
 import { installFetchMock, renderApp, restoreFetch } from "@/test/harness";
@@ -90,7 +90,8 @@ describe("ConsumptionRoute", () => {
 
     renderApp(["/consumption"]);
 
-    const leads = await screen.findByText("Leads");
+    const cards = await screen.findByTestId("overview-cards");
+    const leads = within(cards).getByText("Leads");
     expect(leads.parentElement?.parentElement?.textContent).toContain("7");
   });
 });

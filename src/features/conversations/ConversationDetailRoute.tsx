@@ -103,10 +103,12 @@ export function ConversationDetailRoute() {
                   {turn.direction === "inbound" ? "Lead" : "Bot"}
                 </span>
                 <span>{formatDateTime(turn.timestamp)}</span>
-                {turn.abandoned ? <Badge variant="outline">abandonado</Badge> : null}
+                {turn.direction === "inbound" && turn.abandoned ? (
+                  <Badge variant="outline">abandonado</Badge>
+                ) : null}
               </div>
               <p className="whitespace-pre-wrap text-sm">{turn.text}</p>
-              {turn.reasoning ? (
+              {turn.direction === "outbound" && turn.reasoning ? (
                 <p className="mt-1 text-xs text-muted-foreground">{turn.reasoning}</p>
               ) : null}
             </li>

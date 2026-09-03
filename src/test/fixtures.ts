@@ -54,6 +54,7 @@ export function conversationDetail(
         direction: "outbound",
         text: "claro! posso te explicar",
         timestamp: "2026-09-02T12:00:00.000Z",
+        origin: "bot",
       },
     ],
     ...overrides,
